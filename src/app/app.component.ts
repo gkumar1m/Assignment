@@ -32,28 +32,11 @@ export class AppComponent {
         private modalService: NgbModal) { }
 
     ngOnInit() {
-        this.getalldata();
-        this.zoek();
+        // this.getalldata(); //to get json data manually
+        this.getOrder();
     }
 
     getalldata() {
-        this.usersSerivce.getOrderDetails().subscribe(
-            response => {
-                this.order = response,
-                    error => this.error = error;
-            });
-
-        this.usersSerivce.getPaymentDetails().subscribe(
-            response => {
-                this.payment = response,
-                    error => this.error = error;
-            });
-        this.usersSerivce.getPriceDetails().subscribe(
-            response => {
-                this.prices = response,
-                    error => this.error = error;
-            });
-
         this.order = [
             {
                 "user": "coach",
@@ -603,8 +586,34 @@ export class AppComponent {
 
     }
 
-    zoek() {
-        this.getallcoffeprices();
+    // to get the all orders
+    getOrder() {
+        this.usersSerivce.getOrderDetails().subscribe(
+            response => {
+                this.order = response,
+                    this.getPrice();
+                error => this.error = error;
+            });
+
+    }
+    // to get the total payment 
+    getPayment() {
+
+        this.usersSerivce.getPaymentDetails().subscribe(
+            response => {
+                this.payment = response,
+                    this.getallcoffeprices();
+                error => this.error = error;
+            });
+    }
+    // to get the price
+    getPrice() {
+        this.usersSerivce.getPriceDetails().subscribe(
+            response => {
+                this.prices = response,
+                    this.getPayment();
+                error => this.error = error;
+            });
     }
 
     // to get the Coffe price by passing coffe name and size
